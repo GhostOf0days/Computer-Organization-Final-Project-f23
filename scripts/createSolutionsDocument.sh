@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Used to create a single text file of all solutions
+
 # Navigate to the tests directory
 cd solutions
 
