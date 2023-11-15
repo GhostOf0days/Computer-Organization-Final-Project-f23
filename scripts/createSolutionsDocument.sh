@@ -8,7 +8,7 @@ cd solutions
 
 # Loop through all the solution files
 for solution in solution*.c; do
-  # Add a header for the tsolutionest file in solutions.txt
+  # Add a header for the solution test file in solutions.txt
   echo "===== Content of $solution =====" >> solutions.txt
 
   # Append the content of the test file to solutions.txt
