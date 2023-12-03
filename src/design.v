@@ -194,13 +194,68 @@ module MainMemory (
 endmodule
 
 module Control(
-    input wire clock,
-    input wire [15:0] instruction;
-    output reg write_ir;
+    input wire clk,
+    input wire reset,
+    input wire [15:0] instruction,
+    output reg [15:0] mar,
+    output reg [15:0] mbr,
+    output reg [15:0] acc,
+    output reg [15:0] pc,
+    output wire write_enable,  // Signal to write to memory
+    output reg jump,           // Signal to jump (for PC)
 );
-    // 
+    // Opcode and Operand extraction from instruction
+    wire [3:0] opcode = instruction[15:12]; // Assuming the opcode is in the upper 4 bits
+    wire [11:0] operand = instruction[11:0]; // Assuming the operand is in the lower 12 bits
+    
+    // control logic
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            // Reset logic
+            pc <= 16'b0;
+            acc <= 16'b0;
+        end else begin
+            case (opcode)
+                4'b0000: begin // Add
+                    // Implement add logic
+                end
+
+                4'b0001: begin // Halt
+                    // Implement halt logic (stop clock or enter idle state)
+                end
+
+                4'b0010: begin // Load 
+                    // Implement load logic (must be little endian - see Discord)
+                end
+
+                4'b0011: begin // Store
+                    // Implement store logic (must be little endian - see Discord)
+                end
+
+                4'b0100: begin // Clear
+                    // Implement clear logic
+                end
+
+                4'b0101: begin // Skip
+                    // Implement skip logic
+                end
+
+                4'b0110: begin // Jump
+                    // Implement jump logic
+                end
+
+                default: begin
+                    // Default case/undefined opcode
+                end
+
+            endcase
+        end
+    end
+
+    /* Commented Out - Start
     reg [2:0] instr_step = 3'b0;
-    always @(posedge clock) begin
+    always @(posedge clock) 
+        begin
         case(instr_step)
             3'b000: begin
                 write_ir <= 1;
@@ -216,6 +271,8 @@ module Control(
             
         endcase
     end
+    Commented Out - End */
+
 endmodule
 
 module Computer
@@ -229,7 +286,4 @@ module Computer
     Register pc();
     MainMemory instr_mem();
 
-    
-
-    
 endmodule
