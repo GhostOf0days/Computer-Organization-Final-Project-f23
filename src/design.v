@@ -179,10 +179,15 @@ module MainMemory (
     reg [7:0] memory [0:16383];
 
     always @(posedge clk) begin
-        if (write_enable) begin // Write data_in to the memory location specified by addr
-            memory[addr] <= data_in;
-        end else begin // Read data from the memory location specified by addr
-            data_out <= memory[addr];
+        if (write_enable) begin
+            // Write the lower 8 bits of data_in to the memory location specified by addr
+            memory[addr] <= data_in[7:0];
+            // Write the upper 8 bits of data_in to the next memory location
+            memory[addr + 1'b1] <= data_in[15:8];
+        end else begin
+            // Read 8 bits from the memory location specified by addr and the next location
+            // Combine them to form a 16-bit data_out
+            data_out <= {memory[addr + 1'b1], memory[addr]};
         end
     end
 
