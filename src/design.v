@@ -214,6 +214,8 @@ module Control(
             // Reset logic
             pc <= 16'b0;
             acc <= 16'b0;
+            mar <= 16'b0;
+            mbr <= 16'b0;
         end else begin
             case (opcode)
                 4'b0000: begin // Add
