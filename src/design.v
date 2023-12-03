@@ -205,8 +205,8 @@ module Control(
     output reg jump,           // Signal to jump (for PC)
 );
     // Opcode and Operand extraction from instruction
-    wire [3:0] opcode = instruction[15:12]; // Assuming the opcode is in the upper 4 bits
-    wire [11:0] operand = instruction[11:0]; // Assuming the operand is in the lower 12 bits
+    wire [3:0] opcode = instruction[15:12]; // Opcode is in the upper 4 bits
+    wire [11:0] operand = instruction[11:0]; // Operand is in the lower 12 bits
     
     // control logic
     always @(posedge clk or posedge reset) begin
