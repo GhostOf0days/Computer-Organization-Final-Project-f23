@@ -1,0 +1,9 @@
+Design 1
+1. ISA
+2. Benchmark Program in Assembly
+3. Translate benchmark program to machine code
+4. Hardware
+    ALU
+    DRAM 4Ki X 8 IC, total memory of 16Ki x 16 (every location stores 16 bits; capital B = byte, lowercase b means bit)
+
+Fast Fourier Analysis Testbench for Super Extra Credit (ChatGPT)

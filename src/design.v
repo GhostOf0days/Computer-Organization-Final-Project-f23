@@ -106,7 +106,7 @@ parameter CLOCK_PERIOD = 100;  // Default clock period in nanoseconds
 
 // Clock
 module Clock(output reg signal)
-    local parameter HALF_PERIOD = CLOCK_PERIOD /2
+    localparam HALF_PERIOD = CLOCK_PERIOD /2
     initial begin
         forever begin
             signal = 1;

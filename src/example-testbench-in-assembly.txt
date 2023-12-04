@@ -1,0 +1,17 @@
+Address, Value (4 Digits from Opcode as Hex + Address on Left Side), Code (Can remove after converting address and value. This is word addressable in example. Byte addressable is even only so 100, 102, 104, etc.). Fits in 16 words.
+100, 110C, Load B
+101, 210E, Store Ctr
+102, 110D, Loop, Load Prod
+103, 310B. Add A
+104, 210D, Store Prod
+105, 110E, Load Ctr
+106, 310F, Add Negl
+107, 210E, Store Ctr
+108, 8400, Skip 400    // 0100 0000 0000 -> Check if AC == 0; 3 different ones for comparison equality (compares with most significant bit, 01), LSB is on right
+109, 9102, Jump Loop
+10A, 7000, Halt
+10B, A, Dec 5
+10C, B, Dec 7
+10D, Prod, Dec 0
+10E, Ctr, Hex 0
+10F, Negl, Dec -1
