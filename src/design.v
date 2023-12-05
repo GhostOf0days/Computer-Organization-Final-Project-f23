@@ -221,6 +221,7 @@ module Control(
         write_ir <= 1;
         write_pc <= 1;
         write_dmem <= 0;
+        aluOP <= 4'b0;
 
         @posedge clock
         // Instruction decode
