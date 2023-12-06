@@ -11,7 +11,7 @@ module ram
      input [DATA_WIDTH-1:0] data,
      input cs, // Chip select
      input we, // Write enable
-     inpute oe // Output enable
+     input oe // Output enable
     );
 
     reg [DATA_WIDTH-1:0] mem[LENGTH];
