@@ -234,7 +234,6 @@ module Control(
         case (opcode)
             4'b0000: begin // Add
                 write_mbr <= 1;
-
                 @posedge clock
                 write_mbr <= 0;
                 aluOP <= 4'b0010; //addition
@@ -242,12 +241,11 @@ module Control(
             end
 
             4'b0001: begin // Halt
-                // Implement halt logic (stop clock or enter idle state)
+                clk <= 0; // Stop the clock
             end
 
             4'b0010: begin // Load 
                 write_mbr <= 1;
-
                 @posedge clock
                 write_mbr <= 0;
                 aluOP <= 4'b0001; //load instr
@@ -260,7 +258,6 @@ module Control(
 
             4'b0100: begin // Clear
                 write_mbr <= 1;
-
                 @posedge clock
                 write_mbr <= 0;
                 aluOP <= 4'b0000; //clear instr
@@ -283,6 +280,7 @@ module Control(
 
             default: begin
                 // Default case/undefined opcode
+                $display("Error: Invalid opcode"); // Display an error message
             end
         endcase
     end
@@ -290,11 +288,12 @@ module Control(
 endmodule
 
 module Mux(
-    input wire [15:0] option1;
-    input wire [15:0] option2;
-    input wire select;
-    output reg [15:0] result;
+    input wire [15:0] option1; // Option 1 (16 bits)
+    input wire [15:0] option2; // Option 2 (16 bits)
+    input wire select; // Select (1 bit)
+    output reg [15:0] result; // Result (16 bits)
 )
+    // Mux logic
     always @(*) begin
         if (select) begin
             result <= option1;
@@ -306,8 +305,8 @@ module Mux(
 endmodule
 
 module Computer
-    wire clock;
-    Clock clockmodule(.signal(clock));
+    wire clock; // Clock
+    Clock clockmodule(.signal(clock)); // Instantiate the clock module
 
     // Control setup
     wire [15:0] instr_bus;
