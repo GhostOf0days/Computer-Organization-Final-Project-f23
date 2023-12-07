@@ -1,15 +1,15 @@
 Address, Value, Code
-ORG 100
-Load B
-Store Ctr
-Loop, Load Prod
-Add A
-Store Prod
-Load Ctr
-Add Negl
-Store Ctr
-Skip 400    // 0100 0000 0000 -> Check if AC == 0; 3 different ones for comparison equality (compares with most significant bit, 01), LSB is on right
-Jump Loop
+ORG 100        //This sets the origin of the program to memory address 100
+Load B         //Loads the value of B into the accumulator (AC).
+Store Ctr      // Stores the value in the accumulator (B) into the memory location labeled as Ctr.
+Loop, Load Prod  //Loads the value of Prod into the accumulator.
+Add A            //Adds the value of A to the accumulator.
+Store Prod      // Stores the result of the addition back into the memory location labeled as Prod.
+Load Ctr        //Loads the value of Ctr into the accumulator
+Add Negl        //Adds the value of Negl to the accumulator. This effectively subtracts 1 from Ctr.
+Store Ctr       //Stores the updated value of Ctr back into its memory location.
+Skip 400   // Skips the next instruction if the accumulator is equal to 0. The binary representation of 400 is 0100 0000 0000. This is used as a conditional jump to check if the value in the accumulator (Ctr) is equal to zero.
+Jump Loop   //If the accumulator is not equal to zero, this instruction jumps back to the beginning of the loop (Loop label).
 Halt
 A, Dec 5
 B, Dec 7
