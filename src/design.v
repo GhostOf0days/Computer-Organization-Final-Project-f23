@@ -105,16 +105,19 @@ endmodule
 
 // Clock
 module Clock (
+    input reg stop,
     output reg signal
     );
     localparam CLOCK_PERIOD = 100; // Clock period is 100
     localparam HALF_PERIOD = CLOCK_PERIOD /2;
     initial begin
         forever begin
-            signal = 1;
-            #(HALF_PERIOD);  // Wait for half the clock period
-            signal = 0;
-            #(HALF_PERIOD);  // Wait for half the clock period
+            if (~stop) begin
+                signal = 1;
+                #(HALF_PERIOD);  // Wait for half the clock period
+                signal = 0;
+                #(HALF_PERIOD);  // Wait for half the clock period
+            end
         end
     end
 endmodule
@@ -207,14 +210,15 @@ module Control(
     output reg write_pc,
     output reg write_dmem,
     output reg aluOP[3:0],
-    output reg jump
+    output reg jump,
+    output reg clock_stop
 );
     // Opcode and Operand extraction from instruction
     wire [3:0] opcode = instruction[15:12]; // Opcode is in the upper 4 bits
     wire [11:0] operand = instruction[11:0]; // Operand is in the lower 12 bits
-    
     // control logic
     initial begin
+        clock_stop = 0;
         forever begin
             @(posedge clock);
             // Fetch instruction
@@ -244,7 +248,7 @@ module Control(
                 end
 
                 4'b0001: begin // Halt
-                    clk <= 0; // Stop the clock
+                    clock_stop <= 1; // Stop the clock
                 end
 
                 4'b0010: begin // Load 
@@ -310,7 +314,9 @@ endmodule
 
 module Computer();
     wire clock; // Clock
-    Clock clockmodule(.signal(clock)); // Instantiate the clock module
+    wire clock_stop;
+    Clock clockmodule(clock_stop, .signal(clock)); // Instantiate the clock module
+
 
     // Control setup
     wire [15:0] instr_bus;
@@ -322,7 +328,7 @@ module Computer();
     wire write_dmem;
     wire [3:0] aluOP;
     wire jump;
-    Control control(clock, instr_bus, write_acc, write_mar, write_mbr, write_ir, write_pc, write_dmem, aluOP, jump);
+    Control control(clock, instr_bus, write_acc, write_mar, write_mbr, write_ir, write_pc, write_dmem, aluOP, jump, clock_stop);
 
     wire [15:0] acc_in;
     wire [15:0] acc_out;
