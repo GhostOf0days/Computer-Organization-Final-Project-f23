@@ -1,26 +1,25 @@
 Address Value Code
         ORG 100      / Fibonacci number 11 calculation
-
-Store   Counter     / Load the counter for the loop
-
-Loop, Load    FibNum0     / Load first fibonacci operand (first fibonacci number = 0)
-Store   FibNum1     / Store first fibonacci operand into second (second = 0, will be updated later)
-
+Load  TempCounter / Load the loop counter (9)
+Store Counter / Store the loop counter into counter
+Load FibNum0 / Load FibNum0 into AC
+Store   FibNum1     / Store the the first operand into the second
+Loop, Load FibNum1     / Load first fibonacci operand into AC
+Add FibNum0 / Add the first operand to the second operand 
+Store   FibNum2 / Store result into second (second = 0, will be updated later)
 Load FibNum1 / Load the second fibonacci operand into AC
-
-Store FibNum2 / Store the second operand into the actual fibonacci number
-
+Store FibNum0 / Store the second fibonacci operand into the first 
+Load FibNum2  / Store second operand into first
+Store FibNum1 / Store the second operand into the the first 
 Load  Counter / Load  Counter into AC
 Add Decrement / Dectement to the counter 
-Store Counter // Update Counter
-Skipcond 400 / Check if loop counter is 0 and end
-
+Store Counter / Update Counter
+Skip 400 / Check if loop counter is 0 and end
 Jump    Loop        / Jump back to the loop start
 Halt               / End of the program
 FibNum0, Dec  0     / Initial value of first fibonacci operand
 FibNum1, Dec  1     / Initial value of second fibonacci operand
-FibNum2, Dec  2     / Initial value for fibonacci nuber
-Counter, Dec 11         / Counter set to 11 for F11
-
-TempCounter, Hex 0       / Temporary counter for loop control
+FibNum2, Dec  0     / Initial value for fibonacci nuber
+TempCounter, Dec 9         / Counter set to 11 for F11
+Counter, Hex 0       / Temporary counter for loop control
 Decrement, Dec -1        / Used to decrement by 1
