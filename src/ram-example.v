@@ -20,7 +20,8 @@ module ram
     always @ (posedge clk) begin
         if (cs & we)
             mem[addr] <= data; // Direct addressing
-            // mem[mem[addr]] <= data; // Indirect addressing    
+            // mem[mem[addr]] <= data; // Indirect addressing
+            
     end
 
     always @ (negedge clk) begin // Negative edge, so no clock delay in reading. Not a big deal. Value that is read is on negative edge for this example.
