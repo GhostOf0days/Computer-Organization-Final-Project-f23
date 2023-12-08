@@ -1,4 +1,4 @@
-`timescale 1ns / 1 ps
+`timescale 1ns / 1 ps 
 
 module ram 
     # (parameter ADDR_WIDTH = 13,
@@ -14,21 +14,24 @@ module ram
      input oe // Output enable
     );
 
-    reg [DATA_WIDTH-1:0] mem[LENGTH];
+    reg [DATA_WIDTH-1:0] mem [0:LENGTH-1];
+  
     reg [DATA_WIDTH-1:0] tmp_data;
+  	wire [DATA_WIDTH-1:0] output_data;
 
     always @ (posedge clk) begin
         if (cs & we)
             mem[addr] <= data; // Direct addressing
-            // mem[mem[addr]] <= data; // Indirect addressing    
+            // mem[mem[addr]] <= data; // Indirect addressing      
     end
 
     always @ (negedge clk) begin // Negative edge, so no clock delay in reading. Not a big deal. Value that is read is on negative edge for this example.
         if (cs & !we) 
             tmp_data <= mem[addr]; // Direct addressing
-            // tmp_data <= mem[mem[addr]]; // Indirect addressing
+            // tmp_data <= mem[mem[addr]]; // Indirect addressing  
     end
 
-    assign data cs & oe & !we ? tmp_data : 'hz;
+     assign output_data = cs && oe && !we ? tmp_data : 'hz;
+     assign data = output_data;
 
 endmodule
