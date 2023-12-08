@@ -102,11 +102,13 @@ end
 
 endmodule
 
-parameter CLOCK_PERIOD = 100;  // Default clock period in nanoseconds
 
 // Clock
-module Clock(output reg signal)
-    localparam HALF_PERIOD = CLOCK_PERIOD /2
+module Clock (
+    output reg signal
+    );
+    localparam CLOCK_PERIOD = 100; // Clock period is 100
+    localparam HALF_PERIOD = CLOCK_PERIOD /2;
     initial begin
         forever begin
             signal = 1;
@@ -138,14 +140,14 @@ module ALU (
     input wire [3:0] opcode, // Operation code size is 4 bits
     input wire [15:0] operand1, // Operands are 16 bits
     input wire [15:0] operand2, // Operands are 16 bits
-    output reg [15:0] result // Result is 16 bits
-    output reg cmp_result;
+    output reg [15:0] result, // Result is 16 bits
+    output reg cmp_result
 );
 
 always @(*) begin
     cmp_result = x;
     case (opcode)
-        4'b0000: result = 16'b0                 // Clear operation
+        4'b0000: result = 16'b0;                // Clear operation
         4'b0001: result = operand2;             // For easy load instruction
         4'b0010: result = operand1 + operand2;  // Addition
         4'b0011: result = operand1 - operand2;  // Subtraction
@@ -196,7 +198,7 @@ module MainMemory (
 endmodule
 
 module Control(
-    input wire clk,
+    input wire clock,
     input wire [15:0] instruction,
     output reg write_ac,
     output reg write_mar,
@@ -205,94 +207,96 @@ module Control(
     output reg write_pc,
     output reg write_dmem,
     output reg aluOP[3:0],
-    output reg jump,
+    output reg jump
 );
     // Opcode and Operand extraction from instruction
     wire [3:0] opcode = instruction[15:12]; // Opcode is in the upper 4 bits
     wire [11:0] operand = instruction[11:0]; // Operand is in the lower 12 bits
     
     // control logic
-    forever begin
-        @posedge clock
-        // Fetch instruction
-        write_ac <= 0;
-        write_mar <= 0,
-        write_mbr <= 0;
-        write_ir <= 1;
-        write_pc <= 1;
-        write_dmem <= 0;
-        aluOP <= 4'b0;
+    initial begin
+        forever begin
+            @(posedge clock);
+            // Fetch instruction
+            write_ac <= 0;
+            write_mar <= 0;
+            write_mbr <= 0;
+            write_ir <= 1;
+            write_pc <= 1;
+            write_dmem <= 0;
+            aluOP <= 4'b0;
 
-        @posedge clock
-        // Instruction decode
-        write_ir <= 0;
-        write_pc <= 0;
-        write_mar <= 1;
+            @(posedge clock);
+            // Instruction decode
+            write_ir <= 0;
+            write_pc <= 0;
+            write_mar <= 1;
 
-        @posedge clock
-        write_mar <= 0;
-        case (opcode)
-            4'b0000: begin // Add
-                write_mbr <= 1;
-                @posedge clock
-                write_mbr <= 0;
-                aluOP <= 4'b0010; //addition
-                write_ac <= 1;
-            end
+            @(posedge clock);
+            write_mar <= 0;
+            case (opcode)
+                4'b0000: begin // Add
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b0010; //addition
+                    write_ac <= 1;
+                end
 
-            4'b0001: begin // Halt
-                clk <= 0; // Stop the clock
-            end
+                4'b0001: begin // Halt
+                    clk <= 0; // Stop the clock
+                end
 
-            4'b0010: begin // Load 
-                write_mbr <= 1;
-                @posedge clock
-                write_mbr <= 0;
-                aluOP <= 4'b0001; //load instr
-                write_ac <= 1;
-            end
+                4'b0010: begin // Load 
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b0001; //load instr
+                    write_ac <= 1;
+                end
 
-            4'b0011: begin // Store
-                write_dmem <= 1;
-            end
+                4'b0011: begin // Store
+                    write_dmem <= 1;
+                end
 
-            4'b0100: begin // Clear
-                write_mbr <= 1;
-                @posedge clock
-                write_mbr <= 0;
-                aluOP <= 4'b0000; //clear instr
-                write_ac <= 1;
-            end
+                4'b0100: begin // Clear
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b0000; //clear instr
+                    write_ac <= 1;
+                end
 
-            4'b0101: begin // Skip
-                case (operand)
-                    12'd0: aluOP <= 4'b1101;
-                    12'd2: aluOP <= 4'b1110;
-                    12'd4: aluOP <= 4'b1111;
-                    default: $display("Error: Invalid comparison operand");
-                endcase
-            end
+                4'b0101: begin // Skip
+                    case (operand)
+                        12'd0: aluOP <= 4'b1101;
+                        12'd2: aluOP <= 4'b1110;
+                        12'd4: aluOP <= 4'b1111;
+                        default: $display("Error: Invalid comparison operand");
+                    endcase
+                end
 
-            4'b0110: begin // Jump
-                jump <= 1;
-                write_pc <= 1;
-            end
+                4'b0110: begin // Jump
+                    jump <= 1;
+                    write_pc <= 1;
+                end
 
-            default: begin
-                // Default case/undefined opcode
-                $display("Error: Invalid opcode"); // Display an error message
-            end
-        endcase
+                default: begin
+                    // Default case/undefined opcode
+                    $display("Error: Invalid opcode"); // Display an error message
+                end
+            endcase
+        end
     end
 
 endmodule
 
 module Mux(
-    input wire [15:0] option1; // Option 1 (16 bits)
-    input wire [15:0] option2; // Option 2 (16 bits)
-    input wire select; // Select (1 bit)
-    output reg [15:0] result; // Result (16 bits)
-)
+    input wire [15:0] option1, // Option 1 (16 bits)
+    input wire [15:0] option2, // Option 2 (16 bits)
+    input wire select,         // Select (1 bit)
+    output reg [15:0] result   // Result (16 bits)
+);
     // Mux logic
     always @(*) begin
         if (select) begin
@@ -304,7 +308,7 @@ module Mux(
 
 endmodule
 
-module Computer
+module Computer();
     wire clock; // Clock
     Clock clockmodule(.signal(clock)); // Instantiate the clock module
 
@@ -335,8 +339,8 @@ module Computer
     Register ir(clock, write_ir, i_mem_out, instr_bus);
 
     wire pc_in;
-    Mux pc_in(pc_out + 1, instr_bus[11:0], jump, pc_in);
     wire [15:0] pc_out;
+    Mux pc_in_mux(pc_out + 1, instr_bus[11:0], jump, pc_in);
     wire skip;
     Register pc(clock, write_pc | skip, pc_in, pc_out);
 
