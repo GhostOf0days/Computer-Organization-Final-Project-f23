@@ -12,6 +12,7 @@ module ram
      input cs, // Chip select
      input we, // Write enable
      input oe // Output enable
+     
     );
 
     reg [DATA_WIDTH-1:0] mem [0:LENGTH-1];
@@ -21,14 +22,13 @@ module ram
 
     always @ (posedge clk) begin
         if (cs & we)
-            mem[addr] <= data; // Direct addressing
-            // mem[mem[addr]] <= data; // Indirect addressing
+            mem[addr[7:0]] <= data; // Direct addressing
+            mem[addr[15:8]] <= data; // Direct addressing
     end
 
     always @ (negedge clk) begin // Negative edge, so no clock delay in reading. Not a big deal. Value that is read is on negative edge for this example.
         if (cs & !we) 
-            tmp_data <= mem[addr]; // Direct addressing
-            // tmp_data <= mem[mem[addr]]; // Indirect addressing  
+            tmp_data <= {mem[addr[15:8]], mem[addr[7:0]]}; // Direct addressing
     end
 
      assign output_data = cs && oe && !we ? tmp_data : 'hz;

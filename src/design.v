@@ -148,7 +148,7 @@ module ALU (
 );
 
 always @(*) begin
-    cmp_result = x;
+    cmp_result = 0;
     case (opcode)
         4'b0000: result = 16'b0;                // Clear operation
         4'b0001: result = operand2;             // For easy load instruction
