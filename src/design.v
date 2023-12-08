@@ -105,7 +105,7 @@ endmodule
 
 // Clock
 module Clock (
-    input reg stop,
+    input wire stop,
     output reg signal
     );
     localparam CLOCK_PERIOD = 100; // Clock period is 100
@@ -191,11 +191,13 @@ module MainMemory (
             memory[addr] <= data_in[7:0];
             // Write the upper 8 bits of data_in to the next memory location
             memory[addr + 1'b1] <= data_in[15:8];
-        end else begin
-            // Read 8 bits from the memory location specified by addr and the next location
-            // Combine them to form a 16-bit data_out
-            data_out <= {memory[addr + 1'b1], memory[addr]};
         end
+    end
+
+    always @(negedge clk) begin
+        // Read 8 bits from the memory location specified by addr and the next location
+        // Combine them to form a 16-bit data_out
+        data_out <= {memory[addr + 1'b1], memory[addr]};
     end
 
 endmodule
@@ -209,7 +211,7 @@ module Control(
     output reg write_ir,
     output reg write_pc,
     output reg write_dmem,
-    output reg aluOP[3:0],
+    output reg [3:0] aluOP,
     output reg jump,
     output reg clock_stop
 );
@@ -228,7 +230,7 @@ module Control(
             write_ir <= 1;
             write_pc <= 1;
             write_dmem <= 0;
-            aluOP <= 4'b0;
+            aluOP <= 4'b0000;
 
             @(posedge clock);
             // Instruction decode
@@ -243,7 +245,7 @@ module Control(
                     write_mbr <= 1;
                     @(posedge clock);
                     write_mbr <= 0;
-                    aluOP <= 4'b0010; //addition
+                    aluOP <= 4'b0010;
                     write_ac <= 1;
                 end
 
@@ -255,7 +257,7 @@ module Control(
                     write_mbr <= 1;
                     @(posedge clock);
                     write_mbr <= 0;
-                    aluOP <= 4'b0001; //load instr
+                    aluOP <= 4'b0001;
                     write_ac <= 1;
                 end
 
@@ -267,7 +269,7 @@ module Control(
                     write_mbr <= 1;
                     @(posedge clock);
                     write_mbr <= 0;
-                    aluOP <= 4'b0000; //clear instr
+                    aluOP <= 4'b0000;
                     write_ac <= 1;
                 end
 
@@ -315,7 +317,7 @@ endmodule
 module Computer();
     wire clock; // Clock
     wire clock_stop;
-    Clock clockmodule(clock_stop, .signal(clock)); // Instantiate the clock module
+    Clock clockmodule(clock_stop, clock); // Instantiate the clock module
 
 
     // Control setup
@@ -335,7 +337,8 @@ module Computer();
     Register acc(clock, write_acc, acc_in, acc_out);
 
     wire [15:0] mar_out;
-    Register mar(clock, write_mar, instr_bus[11:0], mar_out);
+
+    Register mar(clock, write_mar, {4'b0000, instr_bus[11:0]}, mar_out);
 
     wire [15:0] mbr_in;
     wire [15:0] mbr_out;
@@ -344,15 +347,15 @@ module Computer();
     wire [15:0] i_mem_out;
     Register ir(clock, write_ir, i_mem_out, instr_bus);
 
-    wire pc_in;
+    wire [15:0] pc_in;
     wire [15:0] pc_out;
-    Mux pc_in_mux(pc_out + 1, instr_bus[11:0], jump, pc_in);
+    Mux pc_in_mux(pc_out + 1'b1, instr_bus[15:0], jump, pc_in);
     wire skip;
     Register pc(clock, write_pc | skip, pc_in, pc_out);
 
     MainMemory instr_mem(clock, pc_out, 0, 16'b0, i_mem_out);
 
-    MainMemory data_mem(clock, mar_out, writs[5], acc_out, mbr_in);
+    MainMemory data_mem(clock, mar_out, write_dmem, acc_out, mbr_in);
 
     ALU alu(aluOP, acc_out, mbr_out, acc_in, skip);
 
