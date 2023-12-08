@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int main() {
-    int first = 0, second = 1, next = 0, i = 2;
+    int first = 0, second = 1, next = 0, i = 0;
 
 
     for (i = 2; i <= 11; i++) {
