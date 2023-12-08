@@ -1,4 +1,3 @@
-Address, Value, Code
 ORG 100
 Load B
 Store Ctr
@@ -13,6 +12,3 @@ Jump Loop
 Halt
 A, Dec 5
 B, Dec 7
-Prod, Dec 0
-Ctr, Hex 0
-Negl, Dec -1
