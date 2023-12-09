@@ -286,7 +286,7 @@ module Control(
                     jump <= 1;
                     write_pc <= 1;
                 end
-                ////////////??//////////////
+                //////////// Extra Credit//////////////
                 // subtract
                 4'b0111: begin
                     write_mbr <= 1;
