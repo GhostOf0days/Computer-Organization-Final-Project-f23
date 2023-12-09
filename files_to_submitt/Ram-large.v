@@ -35,27 +35,27 @@ module single_port_sync_ram_large
   
   wire [3:0] cs;
   
-  decoder #(.ENCODE_WIDTH(2)) dec
+  decoder #() dec
   (   .in(addr[ADDR_WIDTH-1:ADDR_WIDTH-2]),
       .out(cs) 
   );
 
-// Instruct one  
-  single_port_sync_ram  #(.DATA_WIDTH(DATA_WIDTH/2)) u00
-  (   .clk(clk),
-      .addr(addr[ADDR_WIDTH-3:0]),
-      .data(data[(DATA_WIDTH>>DATA_WIDTH_SHIFT)-1:0]),
-      .cs(cs[0]),
-      .we(we),
-      .oe(oe)
+// Sub ramchip
+  single_port_sync_ram  #(.DATA_WIDTH(DATA_WIDTH/2))  u00 
+  (   .clk(clk), // Clock
+      .addr(addr[ADDR_WIDTH-3:0]), // indierct addressing
+      .data(data[(DATA_WIDTH>>DATA_WIDTH_SHIFT)-1:0]), // First part of word
+      .cs(cs[0]), // Chip select
+      .we(we), // Write enable
+      .oe(oe) // Output enable
   );
   single_port_sync_ram #(.DATA_WIDTH(DATA_WIDTH>>DATA_WIDTH_SHIFT)) u01
-  (   .clk(clk),
-      .addr(addr[ADDR_WIDTH-3:0]),
-      .data(data[DATA_WIDTH-1:DATA_WIDTH>>DATA_WIDTH_SHIFT]),
-      .cs(cs[0]),
-      .we(we),
-      .oe(oe)
+  (   .clk(clk), // Clock
+      .addr(addr[ADDR_WIDTH-3:0]), // indierct addressing
+      .data(data[DATA_WIDTH-1:DATA_WIDTH>>DATA_WIDTH_SHIFT]), // Second part of word
+      .cs(cs[0]), // Chip select
+      .we(we), // Write enable
+      .oe(oe) // Output enable
   );
 
   single_port_sync_ram  #(.DATA_WIDTH(DATA_WIDTH/2)) u10
