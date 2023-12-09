@@ -12,7 +12,7 @@ Store FibNum0 / Store the second fibonacci operand into the first
 Load FibNum2  / Store second operand into first
 Store FibNum1 / Store the second operand into the the first 
 Load  Counter / Load  Counter into AC
-Add Decrement / Dectement to the counter 
+Add Decrement / Decrement to the counter 
 Store Counter / Update Counter
 Skip 400 / Check if loop counter is 0 and end
 Jump    Loop        / Jump back to the loop start
