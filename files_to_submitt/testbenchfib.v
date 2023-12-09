@@ -54,29 +54,29 @@ module test_cpu;
         $dumpfile("dump.vcd");
         $dumpvars;
          // Fibonacci Number 11 Calculator
-            @(posedge clk) MAR <= 'h100; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'2128; // Load the loop counter (9)
-            @(posedge clk) MAR <= 'h102; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'312A; // Store the loop counter into counter
-            @(posedge clk) MAR <= 'h104; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'2122; // Load FibNum0 into AC
-            @(posedge clk) MAR <= 'h106; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'3124; // Store the the first operand into the second
-            @(posedge clk) MAR <= 'h108; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'2124; // Load first fibonacci operand into AC
-            @(posedge clk) MAR <= 'h10A; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'0122; // Add the first operand to the second operand 
-            @(posedge clk) MAR <= 'h10C; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'3126; // Store result into second (second = 0, will be updated later)
-            @(posedge clk) MAR <= 'h10E; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'2124; // Load the second fibonacci operand into AC
-            @(posedge clk) MAR <= 'h110; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'3122; // Store the second fibonacci operand into the first 
-            @(posedge clk) MAR <= 'h112; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'2126; // Store second operand into first
-            @(posedge clk) MAR <= 'h114; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'3124; // Store the second operand into the the first 
-            @(posedge clk) MAR <= 'h116; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'212A; // Load  Counter into AC
-            @(posedge clk) MAR <= 'h118; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'012C; // Dectement to the counter 
-            @(posedge clk) MAR <= 'h11A; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'312A; // Update Counter
-            @(posedge clk) MAR <= 'h11C; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'5400; // Check if loop counter is 0 and end
-            @(posedge clk) MAR <= 'h11E; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'6108; // Jump back to the loop start
-            @(posedge clk) MAR <= 'h120; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'1000; // End of the program
-            @(posedge clk) MAR <= 'h122; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'0000; // Initial value of first fibonacci operand
-            @(posedge clk) MAR <= 'h124; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'0001; // Initial value of second fibonacci operand
-            @(posedge clk) MAR <= 'h126; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'0000; // Initial value for fibonacci nuber
-            @(posedge clk) MAR <= 'h128; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'0009; // Counter set to 11 for F11
-            @(posedge clk) MAR <= 'h12A; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'0000; // Temporary counter for loop control
-            @(posedge clk) MAR <= 'h12C; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'FFFF; // Used to decrement by 1
+            @(posedge clk) MAR <= 'h100; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h2128; // Load the loop counter (9)
+            @(posedge clk) MAR <= 'h102; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h312A; // Store the loop counter into counter
+            @(posedge clk) MAR <= 'h104; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h2122; // Load FibNum0 into AC
+            @(posedge clk) MAR <= 'h106; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h3124; // Store the the first operand into the second
+            @(posedge clk) MAR <= 'h108; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h2124; // Load first fibonacci operand into AC
+            @(posedge clk) MAR <= 'h10A; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h0122; // Add the first operand to the second operand 
+            @(posedge clk) MAR <= 'h10C; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h3126; // Store result into second (second = 0, will be updated later)
+            @(posedge clk) MAR <= 'h10E; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h2124; // Load the second fibonacci operand into AC
+            @(posedge clk) MAR <= 'h110; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h3122; // Store the second fibonacci operand into the first 
+            @(posedge clk) MAR <= 'h112; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h2126; // Store second operand into first
+            @(posedge clk) MAR <= 'h114; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h3124; // Store the second operand into the the first 
+            @(posedge clk) MAR <= 'h116; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h212A; // Load  Counter into AC
+            @(posedge clk) MAR <= 'h118; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h012C; // Dectement to the counter 
+            @(posedge clk) MAR <= 'h11A; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h312A; // Update Counter
+            @(posedge clk) MAR <= 'h11C; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h5400; // Check if loop counter is 0 and end
+            @(posedge clk) MAR <= 'h11E; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h6108; // Jump back to the loop start
+            @(posedge clk) MAR <= 'h120; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h1000; // End of the program
+            @(posedge clk) MAR <= 'h122; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h0000; // Initial value of first fibonacci operand
+            @(posedge clk) MAR <= 'h124; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h0001; // Initial value of second fibonacci operand
+            @(posedge clk) MAR <= 'h126; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h0000; // Initial value for fibonacci nuber
+            @(posedge clk) MAR <= 'h128; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h0009; // Counter set to 11 for F11
+            @(posedge clk) MAR <= 'h12A; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'h0000; // Temporary counter for loop control
+            @(posedge clk) MAR <= 'h12C; we <= 1; cs <= 1; oe <= 0; testbench_data <= 'hFFFF; // Used to decrement by 1
 
         @(posedge clk) PC <= 'h100;
     

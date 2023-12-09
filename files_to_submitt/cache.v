@@ -1,8 +1,8 @@
 module Cache(
-    input [15:0] addr,
-    input [15:0] write_data,
     input clk,
+    input [15:0] addr,
     input write,
+    input [15:0] write_data,
     output reg [15:0] out,
 );
     parameter block_count = 3571;
