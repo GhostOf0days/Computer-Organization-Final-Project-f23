@@ -1,13 +1,3 @@
-module ram();
-
-parameter size = 4096; //size of a ram in bits
-
-reg [15:0] ram [0:size-1]; //data matrix for ram
-
-endmodule
-
-
-
 module Cache(
     input [15:0] addr,
     input [15:0] write_data,
@@ -15,11 +5,11 @@ module Cache(
     input write,
     output reg [15:0] out,
 );
-    parameter block_count = 2000;
+    parameter block_count = 3571;
     parameter ram_size = 65536;
 
     reg valid [block_count:0];
-    reg [4:0] tag [block_count:0];
+    reg [3:0] tag [block_count:0];
     reg [15:0] data [block_count:0];
 
     reg [7:0] ram [ram_size:0];
@@ -28,7 +18,7 @@ module Cache(
         localparam block_num = (addr/2)%block_count;
         localparam block_tag = (addr/2)/block_count;
 
-        if (valid[block_num] and tag[block_count] == block_tag) begin
+        if (valid[block_num] and tag[block_num] == block_tag) begin
             // Cache hit
             if (write) begin
                 data[block_num] = write_data;
