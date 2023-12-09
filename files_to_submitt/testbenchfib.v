@@ -53,7 +53,7 @@ module test_cpu;
         
         $dumpfile("dump.vcd");
         $dumpvars;
-         // FibonAccumulatorci
+         // Fibonacci Number 11 Calculator
             @(posedge clk) MAR <= 'h100; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'2128; // Load the loop counter (9)
             @(posedge clk) MAR <= 'h102; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'312A; // Store the loop counter into counter
             @(posedge clk) MAR <= 'h104; we <= 1; cs <= 1; oe <= 0; testbench_data <= h'2122; // Load FibNum0 into AC
