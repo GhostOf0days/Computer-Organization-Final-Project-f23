@@ -1,10 +1,9 @@
 `timescale 1ns / 1 ps 
-// Again the ram module was changed here to fit the requirements of the assignment, 
-// but the logic is the same for loading and writing data to the ram.
+
 module ram 
     # (parameter ADDR_WIDTH = 13, // 2^13 = 8192 per ram part compared to 2^12 = 4096 per ram part
        parameter DATA_WIDTH = 8, // same word size
-       parameter LENGTH = 8192 // 2^13 = 8192 per ram part compared to 2^12 = 4096 per ram part
+       parameter LENGTH = (1<<ADDR_WIDTH)
 )
     (
      input clk,

@@ -1,7 +1,7 @@
 // Adopted from https://www.chipverify.com/verilog/verilog-single-port-ram
 // Based off code given from kuzmin. Any value that was given that could be hardcoded was changed to do so, 
 // I hope my description can show that we have and understanding of the structure we are using.
-// Tried to comment most changes and gave reason for why they were changed.
+// Tried to comment most changes and gave reason for why they were changes
 `include "ram.sv"
 `include "decoder.sv"
 
