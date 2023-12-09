@@ -1,16 +1,21 @@
-`include "decoder.v"
+// Adopted from https://www.chipverify.com/verilog/verilog-single-port-ram
+// Based off code given from kuzmin. Any value that was given that could be hardcoded was changed to do so, 
+// I hope my description can show that we have and understanding of the structure we are using.
+// Tried to comment most changes and gave reason for why they were changed.
+`include "ram.sv"
+`include "decoder.sv"
 
 `timescale 1 ns / 1 ps
 
 module single_port_sync_ram_large
-  # ( parameter ADDR_WIDTH = 14,
-      parameter DATA_WIDTH = 16,
-      parameter DATA_WIDTH_SHIFT = 1
+  # ( parameter ADDR_WIDTH = 14, // size of each u 
+      parameter DATA_WIDTH = 16, // word size
+      // Removed parameter DATA_WIDTH_SHIFT = 1 since I will be always be splitting data width by two
     )
   
-  (   input clk,
+  (   input clk, // Clock
       input [ADDR_WIDTH-1:0] addr,
-      inout [DATA_WIDTH-1:0] data,
+      inout [DATA_WIDTH-1:0] data, 
       input cs_input,
       input we,
       input oe
@@ -18,30 +23,31 @@ module single_port_sync_ram_large
   
   wire [3:0] cs;
   
-  decoder #(.ENCODE_WIDTH(2)) dec
+  // hardcoded decoder since we only need 4 chips
+  decoder #() dec
   (   .in(addr[ADDR_WIDTH-1:ADDR_WIDTH-2]),
       .out(cs) 
   );
 
-// Instruct one  
-  single_port_sync_ram  #(.DATA_WIDTH(DATA_WIDTH/2)) u00
-  (   .clk(clk),
-      .addr(addr[ADDR_WIDTH-3:0]),
-      .data(data[(DATA_WIDTH>>DATA_WIDTH_SHIFT)-1:0]),
-      .cs(cs[0]),
-      .we(we),
-      .oe(oe)
+// Sub ramchip u(address)(first part of word = 0, second part of word = 1) so u00 is the first part of the first ram chip
+  single_port_sync_ram  #()  u00 
+  (   .clk(clk), // Clock
+      .addr(addr[ADDR_WIDTH-3:0]), // indierct addressing
+      .data(data[(DATA_WIDTH>>DATA_WIDTH_SHIFT)-1:0]), // First part of word
+      .cs(cs[0]), // Chip select based off CS 
+      .we(we), // Write enable
+      .oe(oe) // Output enable
   );
-  single_port_sync_ram #(.DATA_WIDTH(DATA_WIDTH>>DATA_WIDTH_SHIFT)) u01
-  (   .clk(clk),
-      .addr(addr[ADDR_WIDTH-3:0]),
-      .data(data[DATA_WIDTH-1:DATA_WIDTH>>DATA_WIDTH_SHIFT]),
-      .cs(cs[0]),
-      .we(we),
-      .oe(oe)
+  single_port_sync_ram #() u01
+  (   .clk(clk), // Clock
+      .addr(addr[ADDR_WIDTH-3:0]), // indierct addressing
+      .data(data[DATA_WIDTH-1:DATA_WIDTH>>DATA_WIDTH_SHIFT]), // Second part of word
+      .cs(cs[0]), // Chip select
+      .we(we), // Write enable
+      .oe(oe) // Output enable
   );
 
-  single_port_sync_ram  #(.DATA_WIDTH(DATA_WIDTH/2)) u10
+  single_port_sync_ram  #() u10
   (   .clk(clk),
       .addr(addr[ADDR_WIDTH-3:0]),
       .data(data[(DATA_WIDTH>>DATA_WIDTH_SHIFT)-1:0]),
@@ -49,7 +55,7 @@ module single_port_sync_ram_large
       .we(we),
       .oe(oe)
   );
-  single_port_sync_ram #(.DATA_WIDTH(DATA_WIDTH>>DATA_WIDTH_SHIFT)) u11
+  single_port_sync_ram #() u11
   (   .clk(clk),
       .addr(addr[ADDR_WIDTH-3:0]),
       .data(data[DATA_WIDTH-1:DATA_WIDTH>>DATA_WIDTH_SHIFT]),
@@ -58,7 +64,7 @@ module single_port_sync_ram_large
       .oe(oe)
   );
 
-  single_port_sync_ram  #(.DATA_WIDTH(DATA_WIDTH/2)) u20
+  single_port_sync_ram  #() u20
   (   .clk(clk),
       .addr(addr[ADDR_WIDTH-3:0]),
       .data(data[(DATA_WIDTH>>DATA_WIDTH_SHIFT)-1:0]),
@@ -66,7 +72,7 @@ module single_port_sync_ram_large
       .we(we),
       .oe(oe)
   );
-  single_port_sync_ram #(.DATA_WIDTH(DATA_WIDTH>>DATA_WIDTH_SHIFT)) u21
+  single_port_sync_ram #() u21
   (   .clk(clk),
       .addr(addr[ADDR_WIDTH-3:0]),
       .data(data[DATA_WIDTH-1:DATA_WIDTH>>DATA_WIDTH_SHIFT]),
@@ -75,7 +81,7 @@ module single_port_sync_ram_large
       .oe(oe)
   );
 
-  single_port_sync_ram  #(.DATA_WIDTH(DATA_WIDTH/2)) u30
+  single_port_sync_ram  #() u30
   (   .clk(clk),
       .addr(addr[ADDR_WIDTH-3:0]),
       .data(data[(DATA_WIDTH>>DATA_WIDTH_SHIFT)-1:0]),
@@ -83,7 +89,7 @@ module single_port_sync_ram_large
       .we(we),
       .oe(oe)
   );
-  single_port_sync_ram #(.DATA_WIDTH(DATA_WIDTH>>DATA_WIDTH_SHIFT)) u31
+  single_port_sync_ram #() u31
   (   .clk(clk),
       .addr(addr[ADDR_WIDTH-3:0]),
       .data(data[DATA_WIDTH-1:DATA_WIDTH>>DATA_WIDTH_SHIFT]),

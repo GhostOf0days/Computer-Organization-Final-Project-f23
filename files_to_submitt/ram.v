@@ -1,8 +1,8 @@
 `timescale 1ns / 1 ps 
 
 module ram 
-    # (parameter ADDR_WIDTH = 12,
-       parameter DATA_WIDTH = 8,
+    # (parameter ADDR_WIDTH = 13, // 2^13 = 8192 per ram part compared to 2^12 = 4096 per ram part
+       parameter DATA_WIDTH = 8, // same word size
        parameter LENGTH = (1<<ADDR_WIDTH)
 )
     (
