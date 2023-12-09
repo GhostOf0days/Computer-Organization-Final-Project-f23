@@ -286,6 +286,57 @@ module Control(
                     jump <= 1;
                     write_pc <= 1;
                 end
+                ////////////??//////////////
+                // subtract
+                4'b0111: begin
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b0011;
+                    write_ac <= 1;
+                end
+                // and x
+                4'b1000: begin
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b1000;
+                    write_ac <= 1;
+                end
+                // or x
+                4'b1001: begin
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b1001;
+                    write_ac <= 1;
+                end
+                // not
+                4'b1010: begin
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b1010;
+                    write_ac <= 1;
+                end
+                // jump with linking
+                4'b1011: begin
+                    jump <= 1;
+                    write_pc <= 1;
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b0001;
+                    write_ac <= 1;
+                end
+                // return x
+                4'b1100: begin
+                    write_mbr <= 1;
+                    @(posedge clock);
+                    write_mbr <= 0;
+                    aluOP <= 4'b0001;
+                    write_ac <= 1;
+                end
 
                 default: begin
                     // Default case/undefined opcode
