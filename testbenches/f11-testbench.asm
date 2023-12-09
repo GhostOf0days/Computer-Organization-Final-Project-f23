@@ -15,7 +15,7 @@ Address Value Code
 118 Add Decrement / Dectement to the counter 
 11A Store Counter / Update Counter
 11C Skip 400 / Check if loop counter is 0 and end
-11E Jump    Loop        / Jump back to the loop start
+11E Jump  Loop   / Jump back to the loop start
 120 Halt               / End of the program
 122 FibNum0, Dec  0     / Initial value of first fibonacci operand
 124 FibNum1, Dec  1     / Initial value of second fibonacci operand
